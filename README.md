@@ -1,5 +1,13 @@
-# HENloader GitHub Pages — 13.52 downward
+# HENloader GoldHEN Offline
 
-GitHub Pages interface ordered from PS4 firmware 13.52 downward. The page detects/selects the firmware and keeps 13.52 explicitly marked as incomplete research; it does not claim unsupported jailbreak functionality.
+مشروع GitHub Pages/Offline مرتب. يحتوي على GoldHEN payload محلي في `payloads/hen.bin`، مع فحص توفره من الواجهة.
 
-Upload the contents of this folder to a GitHub repository and enable GitHub Pages from the main branch.
+مهم: صفحة WebKit وحدها لا تستطيع تنفيذ ملف `hen.bin` مباشرة. التشغيل الفعلي يحتاج exploit/loader متوافق مع Firmware. المشروع لا يدّعي دعم 13.52 الكامل.
+
+
+## 13.52 status
+The 13.52 firmware profile now uses the public PS4HEN offsets for PRISON0, ROOTVNODE and SYSENT. The loader remains payload-only on 13.52 because no verified exploit chain/shellcode is included in this package.
+
+
+## 13.52 test mode
+13.52 uses the experimental profile and verified public offsets. The kernel exploit stage remains gated until a verified 13.52 exploit chain/shellcode is available; payload-only fallback is retained.
