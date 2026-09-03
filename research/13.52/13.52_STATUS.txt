@@ -1,15 +1,20 @@
-HENloader automatic firmware profile selection
-===============================================
+HEN 13.52 TEST-SAFE
+====================
 
-The loader now reads the PS4 firmware at runtime and automatically selects
-the matching loader profile instead of using a firmware-specific hard-coded
-branch. Unsupported firmware is stopped safely before exploit code runs.
+Firmware profile: FW_13.52_EXPERIMENTAL
+Public offsets integrated:
+- PRISON0  = 0x0111FA18
+- ROOTVNODE= 0x02136E90
+- SYSENT    = 0x01102B70
 
-13.52:
-- Detected automatically.
-- Profile: FW_13.52_PAYLOAD_ONLY
-- Payload path: /disc/BDMV/AUXDATA/hen.bin
-- Lapse/Poops are NOT executed because this supplied source does not contain
-  a verified 13.52 exploit chain.
+TEST MODE:
+13.52 is routed through the experimental profile, but the kernel-exploit
+stage is gated unless a verified 13.52 exploit primitive and matching
+shellcode are present. This prevents the older Lapse/Poops chain from being
+run with incompatible 13.52 assumptions.
 
-This is automatic firmware selection, not proof of a 13.52 jailbreak.
+Payload-only fallback remains available at:
+/disc/BDMV/AUXDATA/hen.bin
+
+This package is for testing the 13.52 profile/loader integration. It does
+not claim a complete, hardware-verified 13.52 jailbreak chain.
