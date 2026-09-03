@@ -1,65 +1,7 @@
-const versions = [
-  '13.52','13.50','13.02','13.00','12.52','12.50','12.02','12.00',
-  '11.52','11.50','11.02','11.00','10.01','10.00','9.60','9.00'
-];
-
-const firmwareStatus = v => v === '13.52'
-  ? 'Research / incomplete'
-  : 'Source path available';
-
-function detectFirmware() {
-  // A normal WebKit page cannot reliably read PS4 System Software directly.
-  // First try common UA formats, then allow a manual fallback.
-  const ua = navigator.userAgent || '';
-  const patterns = [
-    /PlayStation 4[\s;\/]?(\d+\.\d+(?:\.\d+)?)/i,
-    /PS4[\s;\/]?(\d+\.\d+(?:\.\d+)?)/i,
-    /Version[\s\/]?(\d+\.\d+(?:\.\d+)?)/i
-  ];
-  for (const re of patterns) {
-    const m = ua.match(re);
-    if (m) {
-      const found = m[1].split('.').slice(0,2).join('.');
-      if (versions.includes(found)) return found;
-    }
-  }
-  return null;
-}
-
-function render() {
-  const sel = document.getElementById('firmware');
-  const msg = document.getElementById('msg');
-  const detected = document.getElementById('detected');
-
-  versions.forEach(v => {
-    const o = document.createElement('option');
-    o.value = v;
-    o.textContent = `PS4 ${v} — ${firmwareStatus(v)}`;
-    sel.appendChild(o);
-  });
-
-  const auto = detectFirmware();
-  sel.value = auto || '13.52';
-
-  if (auto) {
-    detected.textContent = `تم التعرف تلقائيًا على Firmware: ${auto}`;
-    msg.textContent = auto === '13.52'
-      ? '13.52: بيانات المسار الحالية غير مكتملة، لذلك لن يتم تشغيل exploit غير متحقق.'
-      : `Firmware ${auto}: تم اختيار المسار المطابق تلقائيًا.`;
-  } else {
-    detected.textContent = 'تعذر قراءة إصدار النظام تلقائيًا من WebKit؛ اختر الإصدار يدويًا.';
-  }
-
-  document.getElementById('run').onclick = () => {
-    const v = sel.value;
-    if (v === '13.52') {
-      msg.textContent = '13.52: البيانات الحالية غير مكتملة، لذلك لن يتم تشغيل مسار exploit غير متحقق.';
-      return;
-    }
-    msg.textContent = `Firmware ${v}: تم اختيار المسار الموجود في المشروع.`;
-  };
-}
-
-render();
-
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+const versions=['13.52','13.50','13.02','13.00','12.52','12.50','12.02','12.00','11.52','11.50','11.02','11.00','10.01','10.00','9.60','9.00'];
+const supported=new Set(['9.00','9.03','9.04','9.50','9.51','9.60','10.00','10.01','10.50','10.70','10.71','11.00','11.02','11.50','11.52','12.00','12.02','12.50','12.52']);
+const firmwareStatus=v=>v==='13.52'?'غير مكتمل':(supported.has(v)?'مسار المصدر موجود':'غير مؤكد');
+function detectFirmware(){const ua=navigator.userAgent||'';for(const re of [/PlayStation 4[\s;\/]?(\d+\.\d+(?:\.\d+)?)/i,/PS4[\s;\/]?(\d+\.\d+(?:\.\d+)?)/i]){const m=ua.match(re);if(m){const f=m[1].split('.').slice(0,2).join('.');if(versions.includes(f))return f;}}return null;}
+async function payloadReady(){try{const r=await fetch('./payloads/hen.bin',{cache:'no-store'});return r.ok&&(Number(r.headers.get('content-length'))||1)>0;}catch(e){return false;}}
+function render(){const sel=document.getElementById('firmware'),msg=document.getElementById('msg'),det=document.getElementById('detected'),status=document.getElementById('status'),run=document.getElementById('run');versions.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=`PS4 ${v} — ${firmwareStatus(v)}`;sel.appendChild(o);});const auto=detectFirmware();sel.value=auto||'9.00';det.textContent=auto?`Firmware: ${auto}`:'اختر Firmware يدويًا';status.textContent='فحص GoldHEN المحلي…';payloadReady().then(ok=>{status.textContent=ok?'GoldHEN payload: جاهز محليًا':'GoldHEN payload: غير موجود';msg.textContent=ok?'ملف GoldHEN موجود داخل المشروع.':'ملف GoldHEN غير موجود.';});run.onclick=async()=>{const v=sel.value;if(v==='13.52'||!supported.has(v)){msg.textContent=`${v}: لا يوجد مسار HEN موثّق كامل داخل المشروع.`;return;}if(await payloadReady()){msg.textContent=`${v}: GoldHEN payload محلي وجاهز. تشغيله يحتاج مسار exploit/loader المتوافق مع هذا الإصدار؛ الصفحة وحدها لا تستطيع تنفيذ hen.bin.`;}else msg.textContent='GoldHEN payload غير موجود.';};}
+render();if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
