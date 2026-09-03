@@ -2,20 +2,31 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PS4 WebKit HEN Loader</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AMINE PS4 • WebKit</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<main>
-  <h1>PS4 WebKit HEN Loader</h1>
-  <p>كشف Firmware واختيار المسار تلقائيًا — من 13.52 نزولاً.</p>
-  <p id="detected">جاري فحص إصدار النظام…</p>
-  <select id="firmware" aria-label="PS4 Firmware"></select>
-  <button id="run">بدء المسار</button>
-  <p id="msg"></p>
-  <small>ملاحظة: WebKit لا يضمن إتاحة Firmware الحقيقي للصفحة؛ عند عدم توفره يظهر الاختيار اليدوي. 13.52 لا يُشغّل مسارًا غير متحقق.</small>
+<div class="backdrop"></div><div class="noise"></div>
+<header class="topbar"><div class="brand"><span class="ps">PS4</span><span class="slash">/</span><span>WEBKIT</span></div><div class="badge">AMINE PS4</div></header>
+<main class="shell">
+  <section class="hero">
+    <div class="eyebrow">PLAYSTATION 4 • WEBKIT</div>
+    <h1>واجهة HEN احترافية</h1>
+    <p>كشف إصدار النظام واختيار المسار المناسب تلقائيًا.</p>
+  </section>
+  <section class="panel">
+    <div class="panel-head"><div><span class="dot"></span> حالة النظام</div><span id="clock">--:--</span></div>
+    <div class="detect"><div class="console">PS4</div><div class="detect-text"><strong id="detected">جاري فحص إصدار النظام…</strong><span id="status">التحقق من المتصفح</span></div><div class="spinner"></div></div>
+    <div class="label">Firmware</div>
+    <select id="firmware" aria-label="PS4 Firmware"></select>
+    <button id="run" class="primary"><span>⚡</span> بدء المسار</button>
+    <div id="msg" class="message">جاهز.</div>
+  </section>
+  <div class="tiles"><div><b>AUTO</b><span>اختيار تلقائي</span></div><div><b>PS4</b><span>تصميم مخصص</span></div><div><b>13.52 → 9.00</b><span>ترتيب الإصدارات</span></div></div>
+  <p class="note">الواجهة لا تغيّر ملفات الـexploit الأصلية. إذا تعذر على WebKit قراءة Firmware الحقيقي، يمكنك اختياره يدويًا.</p>
 </main>
+<footer>AMINE PS4 <span>•</span> WEBKIT INTERFACE</footer>
 <script src="js/app.js"></script>
 </body>
 </html>
