@@ -1,0 +1,15 @@
+HENloader automatic firmware profile selection
+===============================================
+
+The loader now reads the PS4 firmware at runtime and automatically selects
+the matching loader profile instead of using a firmware-specific hard-coded
+branch. Unsupported firmware is stopped safely before exploit code runs.
+
+13.52:
+- Detected automatically.
+- Profile: FW_13.52_PAYLOAD_ONLY
+- Payload path: /disc/BDMV/AUXDATA/hen.bin
+- Lapse/Poops are NOT executed because this supplied source does not contain
+  a verified 13.52 exploit chain.
+
+This is automatic firmware selection, not proof of a 13.52 jailbreak.
