@@ -103,10 +103,16 @@ public class InitXlet implements Xlet, UserEventListener {
                 // Automatic firmware routing. Never borrow offsets from another FW.
                 // 13.52 is intentionally payload-only because this source has no
                 // verified 13.52 Lapse/Poops exploit chain.
-                if ("FW_13.52_PAYLOAD_ONLY".equals(loaderProfile)) {
-                  InitXlet.console.println("13.52 detected: payload-only loader profile.");
-                  InitXlet.console.println("Payload path: /disc/BDMV/AUXDATA/hen.bin");
-                  InitXlet.console.println("No unverified Lapse/Poops chain will be executed.");
+                if ("FW_13.52_EXPERIMENTAL".equals(loaderProfile)) {
+                  InitXlet.console.println("13.52 detected: EXPERIMENTAL exploit route.");
+                  InitXlet.console.println("Route: Poops (13.52 prerequisite-gated)");
+                  if (!KernelOffset.has13_52ExploitPrerequisites()) {
+                    InitXlet.console.println("13.52 exploit prerequisites are incomplete.");
+                    InitXlet.console.println("Poops execution is blocked to avoid zero/unverified offsets.");
+                  } else {
+                    int j = Poops.main(InitXlet.console);
+                    InitXlet.console.println(j == 0 ? "Success" : "Poops failed (" + j + ")");
+                  }
                 } else if (!KernelOffset.hasPS4Offsets()) {
                   InitXlet.console.println("Unsupported Firmware: " + str);
                 } else if (!KernelOffset.isExploitProfileSupported(str)) {
