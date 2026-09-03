@@ -80,6 +80,11 @@ public class KernelOffset
     
     addFirmwareOffsets("12.50", 0L, 17955352L, 34827920L, 0L, 17868640L, 293681L, 945184L);
     addFirmwareOffsets("12.52", 0L, 17955352L, 34827920L, 0L, 17868640L, 293681L, 945184L);
+
+    // 13.52 public kernel offset profile (offsets verified against PS4HEN).
+    // EVF/JMP_RSI/KL_LOCK/TARGET_ID are intentionally left unavailable here;
+    // this project does not contain a verified 13.52 exploit/shellcode chain.
+    addFirmwareOffsets("13.52", 0L, 0x0111FA18L, 0x02136E90L, 0L, 0x01102B70L, 0L, 0L);
   }
   
   private static void initializeShellcodes() {
@@ -143,7 +148,7 @@ public class KernelOffset
    */
   public static String getLoaderProfile(String firmware) {
     if (firmware == null) return "unsupported";
-    if (firmware.equals("13.52")) return "FW_13.52_PAYLOAD_ONLY";
+    if (firmware.equals("13.52")) return "FW_13.52_EXPERIMENTAL";
     if (firmware.equals("12.52")) return "FW_12.52";
     if (firmware.equals("12.50")) return "FW_12.50";
     if (firmware.equals("12.02")) return "FW_12.02";
@@ -155,11 +160,20 @@ public class KernelOffset
   /** Only versions with a verified exploit implementation may enter Lapse/Poops. */
   public static boolean isExploitProfileSupported(String firmware) {
     if (firmware == null) return false;
-    // 13.52 has offsets/profile metadata but no verified Lapse/Poops chain in
-    // this source tree, so keep it payload-only until such a chain is supplied.
-    return firmware.equals("9.00") || firmware.equals("11.00") ||
+    // 13.52 is exposed as an experimental route.
+    return firmware.equals("13.52") || firmware.equals("9.00") ||
            firmware.equals("12.02") || firmware.equals("12.50") ||
            firmware.equals("12.52");
+  }
+
+  public static boolean has13_52ExploitPrerequisites() {
+    if (!"13.52".equals(getFirmwareVersion())) return false;
+    return getPS4Offset("PRISON0") != 0L &&
+           getPS4Offset("ROOTVNODE") != 0L &&
+           getPS4Offset("SYSENT_661_OFFSET") != 0L &&
+           getPS4Offset("JMP_RSI_GADGET") != 0L &&
+           getPS4Offset("KL_LOCK") != 0L &&
+           hasShellcodeForCurrentFirmware();
   }
 
   public static boolean hasPS4Offsets() {
