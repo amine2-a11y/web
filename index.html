@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" manifest="cache.appcache">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AMINE PS4</title>
+<style>
+  :root { --accent:#ff6a00; --accent2:#ffb347; --glass:rgba(7,12,18,.66); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; padding:0; min-height:100%; background:#05080b url("ps4-background.jpg") center center / cover fixed no-repeat; color:#eef3f7; font:15px/1.45 "Segoe UI",system-ui,sans-serif; }
+  body::before { content:""; position:fixed; inset:0; background:linear-gradient(135deg,rgba(2,5,8,.55),rgba(4,8,12,.18) 48%,rgba(2,4,7,.62)); pointer-events:none; }
+  #brand { position:relative; z-index:2; text-align:center; padding:10px 14px; background:rgba(5,9,13,.74); border-bottom:1px solid rgba(255,145,60,.28);   }
+  #brand img { width:30px; height:30px; margin-right:9px; border-radius:50%; vertical-align:middle;  }
+  #brand b { font-size:15px; font-weight:800; letter-spacing:.16em; color:#fff; vertical-align:middle; text-shadow:0 2px 10px #000; }
+  #wrap { position:relative; z-index:2; width:min(760px,calc(100% - 34px)); margin:36px auto; padding:22px 24px; border:1px solid rgba(255,170,95,.22); border-radius:18px; background:var(--glass);   }
+  #state { font-size:24px; font-weight:800; margin:0 0 8px; letter-spacing:.03em; text-shadow:0 3px 15px #000; }
+  #det { font-size:13px; color:#c0cad3; margin:0 0 5px; }
+  #det b { color:#fff; font-weight:700; }
+  #cache { font-size:12px; color:#9da8b2; margin:0; min-height:14px; }
+  #cache.cacheok { color:#9ff0bf; }
+  .ok { color:#9ff0bf; } .bad { color:#ff9b82; } .warn { color:#ffd08a; }
+</style>
+</head>
+<body>
+<div id="brand"><img src="data:image/png;base64,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" alt="Amine PS4" width="28" height="28"><b>AMINE PS4</b></div>
+<div id="wrap">
+  <div id="state">detecting firmware...</div>
+  <div id="det"></div>
+  <div id="cache"></div>
+</div>
+
+<script>
+(function () {
+    var stateEl = document.getElementById("state");
+    var detEl = document.getElementById("det");
+    var cacheEl = document.getElementById("cache");
+    function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
+    function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
+    var params = new URLSearchParams(location.search);
+
+    // Firmwares this build has a MEASURED kernel table for. jb.js still runs its
+    // own kernel-table-present gate, so this is UX only -- an unlisted firmware
+    // can still be launched with a tap. KEEP IN SYNC with ps4_offsets.js: add a
+    // fwnum here in the SAME commit that fills that firmware's kernel RVAs.
+    // The PS4 reports its minor as two hex digits in the UA (13.52 -> minor 0x52).
+    var SUPPORTED = { 1302: 1, 1304: 1, 1350: 1, 1352: 1 }; // all measured on hardware
+
+    var key = null, fwnum = null;
+    var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
+    if (m) {
+        var ms = parseInt(m[2], 16).toString(16);
+        if (ms.length < 2) ms = "0" + ms;
+        key = m[1] + "." + ms;
+        fwnum = parseInt(m[1], 10) * 100 + parseInt(ms, 10);
+    }
+
+    var forced = params.get("force") === "1";
+    var supported = forced || (fwnum !== null && SUPPORTED[fwnum] === 1);
+    detEl.innerHTML = "firmware <b>" + (key || "unknown") + "</b>"
+        + (supported ? " &middot; <b>supported</b>"
+                     : " &middot; not in this build's kernel table");
+
+    var target = "jb.html" + location.search;
+    function go() { setState("loading jailbreak...", "warn"); location.replace(target); }
+
+    function waitForTap(msg, action) {
+        setState(msg, "warn");
+        function fire() {
+            window.removeEventListener("click", fire);
+            window.removeEventListener("keydown", fire);
+            action();
+        }
+        window.addEventListener("click", fire);
+        window.addEventListener("keydown", fire);
+    }
+
+    // Off-target consoles are not launched automatically -- one tap still runs
+    // it, so a user-agent quirk on the real 13.52 console can never lock it out.
+    if (!supported) {
+        setState("UNSUPPORTED FIRMWARE", "bad");
+        waitForTap("UNSUPPORTED (" + (key || "unknown") + ") -- press X or tap to run anyway", go);
+        return;
+    }
+
+    var ac = window.applicationCache;
+    if (!ac || !document.documentElement.hasAttribute("manifest")) {
+        go();
+    } else if (!navigator.onLine) {
+        setCache("offline -- from cache", true);
+        go();
+    } else if (ac.status === ac.IDLE) {
+        setCache("cached", true);
+        go();
+    } else if (ac.status === ac.UPDATEREADY) {
+        try { ac.swapCache(); } catch (e) {}
+        setCache("update downloaded", true);
+        waitForTap("UPDATE READY -- press X or tap to reload & run",
+                   function () { location.reload(); });
+    } else {
+        setCache("checking cache...");
+        ac.addEventListener("downloading",
+            function () { setCache("caching for offline (first run)..."); }, false);
+        ac.addEventListener("progress", function (e) {
+            if (e && e.total)
+                setCache("caching " + Math.round((e.loaded / e.total) * 100) + "%");
+        }, false);
+        ac.addEventListener("cached", function () {
+            setCache("cached for offline use", true);
+            waitForTap("CACHED (first run) -- press X or tap to run", go);
+        }, false);
+        ac.addEventListener("updateready", function () {
+            try { ac.swapCache(); } catch (e) {}
+            setCache("update downloaded", true);
+            waitForTap("UPDATE READY -- press X or tap to reload & run",
+                       function () { location.reload(); });
+        }, false);
+        ac.addEventListener("noupdate", function () {
+            setCache("cached -- offline ready", true);
+            go();
+        }, false);
+        ac.addEventListener("error", function () {
+            setCache("cache unavailable");
+            waitForTap("CACHE FAILED -- press X or tap to run anyway", go);
+        }, false);
+        ac.addEventListener("obsolete", function () {
+            setCache("cache obsolete");
+            waitForTap("CACHE OBSOLETE -- press X or tap to run", go);
+        }, false);
+    }
+})();
+</script>
+</body>
+</html>
